@@ -43,6 +43,8 @@ export const scratchReward = async (req, res) => {
     await session.commitTransaction();
     session.endSession();
 
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+
     return res.status(200).json({
       success: true,
       reward: selectedReward,

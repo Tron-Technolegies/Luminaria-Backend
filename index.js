@@ -17,10 +17,7 @@ app.use(
       if (!origin) return callback(null, true);
 
       const allowedOrigins = [
-        "https://intermine-solutions.de",
-        "https://adminapp.intermine-solutions.de",
-        "https://app.intermine-solutions.de",
-        "https://api.dahabminers.com",
+        "https://luminauratest.netlify.app",
         "http://localhost:5173",
         "http://localhost:4000",
       ];
