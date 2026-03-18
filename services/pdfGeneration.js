@@ -103,7 +103,11 @@ import puppeteer from "puppeteer";
 export async function generateCouponPDF(user, tagNumber) {
   const browser = await puppeteer.launch({
     headless: "new",
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    args: [
+      "--no-sandbox", 
+      "--disable-setuid-sandbox", 
+      "--disable-dev-shm-usage"
+    ],
   });
 
   const page = await browser.newPage();
