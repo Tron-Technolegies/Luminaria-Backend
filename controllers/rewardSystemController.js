@@ -138,18 +138,20 @@ export const claimReward = async (req, res) => {
 
     try {
       const pdfBuffer = await generateCouponPDF(user, tagNumber);
-      
+
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader(
         "Content-Disposition",
         `attachment; filename=coupon-${tagNumber}.pdf`,
       );
-      
+
       return res.send(pdfBuffer);
     } catch (pdfError) {
       console.error("PDF generation error:", pdfError);
       return res.status(500).json({
-        message: "Your reward was successfully claimed, but we couldn't generate the PDF receipt: " + pdfError.message,
+        message:
+          "Your reward was successfully claimed, but we couldn't generate the PDF receipt: " +
+          pdfError.message,
       });
     }
   } catch (error) {
@@ -161,14 +163,59 @@ export const claimReward = async (req, res) => {
       console.error("Abort transaction error:", abortErr);
     }
     if (session.inTransaction()) {
-       session.endSession();
+      session.endSession();
     } else {
-       // if not in transaction, session might already be ended, but calling endSession is usually safe.
-       try { session.endSession(); } catch (e) {}
+      // if not in transaction, session might already be ended, but calling endSession is usually safe.
+      try {
+        session.endSession();
+      } catch (e) {}
     }
 
     return res.status(500).json({
       message: error.message || "An unexpected error occurred",
     });
+  }
+};
+
+export const getAllAvailableRewards = async (req, res) => {
+  try {
+    const reward = await Reward.find();
+    res.status(200).json(reward);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateReward = async (req, res) => {
+  try {
+    const { id, polishing, interior, carwash } = req.body;
+    const reward = await Reward.findByIdAndUpdate(
+      id,
+      { polishing, interior, carwash },
+      { new: true },
+    );
+    res.status(200).json(reward);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getUnusedTags = async (req, res) => {
+  try {
+    const tags = await Tag.find({ used: false });
+    res.status(200).json(tags);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const addNewTag = async (req, res) => {
+  try {
+    const { tagNumber } = req.body;
+    const tag = new Tag({ tagNumber });
+    await tag.save();
+    res.status(200).json(tag);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

@@ -10,6 +10,7 @@ import rewardSystemRouter from "./routers/rewardSystemRouter.js";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 app.use(
   cors({
@@ -18,6 +19,7 @@ app.use(
 
       const allowedOrigins = [
         "https://luminauratest.netlify.app",
+        "https://luminauratestadmin.netlify.app",
         "http://localhost:5173",
         "http://localhost:4000",
       ];
