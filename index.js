@@ -20,6 +20,8 @@ app.use(
       const allowedOrigins = [
         "https://luminauratest.netlify.app",
         "https://luminauratestadmin.netlify.app",
+        "https://luminauraindia.com",
+        "https://admin.luminauraindia.com",
         "http://localhost:5173",
         "http://localhost:4000",
       ];
